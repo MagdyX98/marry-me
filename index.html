@@ -1,10 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0b0f1a" />
-  <title>💍 A Question</title>
+  <title>💍 سؤال صغير</title>
+
   <style>
     :root{
       --bg1:#070a12;
@@ -13,18 +14,25 @@
       --stroke: rgba(255,255,255,.14);
       --text: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.68);
+
       --yes1:#22c55e;
       --yes2:#16a34a;
+
       --no1:#ff4d6d;
       --no2:#c9184a;
+
       --shadow: 0 18px 60px rgba(0,0,0,.45);
+
+      --radius: 28px;
+      --btnRadius: 18px;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
       color:var(--text);
       overflow-x:hidden;
       background:
@@ -53,25 +61,27 @@
       50%{ transform: translate3d(2vw,-2vh,0) rotate(8deg); }
     }
 
+    /* Card */
     .card{
-      width:min(560px, 100%);
+      width:min(580px, 100%);
       background: var(--card);
       border:1px solid var(--stroke);
-      border-radius:28px;
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       position:relative;
       z-index:1;
       overflow:hidden;
+      transform: translateY(2px);
     }
-
     .card::before{
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(500px 240px at 30% 0%, rgba(255,255,255,.14), transparent 60%),
-                  radial-gradient(420px 280px at 80% 20%, rgba(99,102,241,.18), transparent 55%);
+      background:
+        radial-gradient(520px 260px at 30% 0%, rgba(255,255,255,.16), transparent 60%),
+        radial-gradient(420px 280px at 80% 20%, rgba(99,102,241,.18), transparent 55%);
       pointer-events:none;
     }
 
@@ -97,8 +107,8 @@
 
     h1{
       margin:14px 0 8px;
-      font-size: clamp(26px, 4.5vw, 38px);
-      line-height:1.1;
+      font-size: clamp(24px, 4.3vw, 36px);
+      line-height:1.12;
       letter-spacing:-.6px;
     }
 
@@ -113,21 +123,31 @@
     }
 
     .question{
-      margin:18px 0 18px;
+      margin:18px 0 10px;
       display:flex;
       align-items:center;
       justify-content:center;
       gap:10px;
-      font-size: clamp(22px, 4.2vw, 34px);
-      font-weight:800;
-      letter-spacing:-.4px;
+      font-size: clamp(24px, 4.6vw, 40px);
+      font-weight:900;
+      letter-spacing:-.5px;
       text-align:center;
     }
+
     .question span{
-      background: linear-gradient(90deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
+      background: linear-gradient(90deg, rgba(255,255,255,.96), rgba(255,255,255,.72));
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
+      text-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .subhint{
+      margin-top:8px;
+      text-align:center;
+      color:rgba(255,255,255,.62);
+      font-size:13px;
+      line-height:1.45;
     }
 
     .buttons{
@@ -135,55 +155,64 @@
       gap:12px;
       justify-content:center;
       flex-wrap:wrap;
-      margin-top:14px;
+      margin-top:16px;
       position:relative;
+      padding-bottom:6px;
     }
 
     button{
       border:0;
       cursor:pointer;
       padding:14px 18px;
-      border-radius:16px;
-      font-weight:800;
+      border-radius: var(--btnRadius);
+      font-weight:900;
       font-size:16px;
       color:white;
-      min-width: 140px;
+      min-width: 160px;
       transform: translateZ(0);
       transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
       box-shadow: 0 14px 34px rgba(0,0,0,.28);
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      position:relative;
+    }
+
+    button:focus-visible{
+      outline: 2px solid rgba(255,255,255,.55);
+      outline-offset: 3px;
     }
 
     button:active{ transform: scale(.98); }
 
     #yesBtn{
       background: linear-gradient(180deg, var(--yes1), var(--yes2));
-      position:relative;
       outline: 1px solid rgba(255,255,255,.12);
     }
-
     #yesBtn::after{
       content:"";
       position:absolute;
       inset:0;
-      border-radius:16px;
+      border-radius: var(--btnRadius);
       background: radial-gradient(240px 90px at 30% 20%, rgba(255,255,255,.35), transparent 55%);
       pointer-events:none;
-      opacity:.9;
+      opacity:.95;
       mix-blend-mode: screen;
     }
 
     #noBtn{
       background: linear-gradient(180deg, var(--no1), var(--no2));
       outline: 1px solid rgba(255,255,255,.12);
+      transform-origin: center;
     }
 
-    .hint{
-      margin-top:14px;
-      text-align:center;
-      color:rgba(255,255,255,.62);
-      font-size:12.5px;
+    /* Tiny pulse when No clicked */
+    .shake{ animation: shake .22s ease; }
+    @keyframes shake{
+      0%{transform:translateX(0)}
+      33%{transform:translateX(-6px)}
+      66%{transform:translateX(6px)}
+      100%{transform:translateX(0)}
     }
 
     /* Success view */
@@ -196,28 +225,30 @@
 
     .photoWrap{
       margin:14px auto 12px;
-      width:min(420px, 100%);
+      width:min(440px, 100%);
       border-radius:22px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.16);
       box-shadow: 0 18px 60px rgba(0,0,0,.42);
-      transform: translateY(6px);
+      transform: translateY(10px);
       opacity:0;
-      animation: popIn .55s cubic-bezier(.2,.9,.2,1) forwards;
+      animation: popIn .6s cubic-bezier(.2,.9,.2,1) forwards;
       background: rgba(255,255,255,.06);
     }
+
     .photoWrap img{
       width:100%;
       height:auto;
       display:block;
     }
+
     @keyframes popIn{
       to{ transform: translateY(0); opacity:1; }
     }
 
     .love{
-      font-size: clamp(20px, 4.5vw, 34px);
-      font-weight:900;
+      font-size: clamp(20px, 4.6vw, 34px);
+      font-weight:1000;
       letter-spacing:-.4px;
       margin-top:10px;
       background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(34,197,94,.85));
@@ -225,10 +256,18 @@
       background-clip:text;
       color:transparent;
       opacity:0;
-      animation: fadeUp .55s ease .12s forwards;
+      transform: translateY(6px);
+      animation: fadeUp .55s ease .14s forwards;
     }
+
+    .miniText{
+      margin-top:6px;
+      color:rgba(255,255,255,.64);
+      font-size:13px;
+    }
+
     @keyframes fadeUp{
-      to{ transform: translateY(-2px); opacity:1; }
+      to{ transform: translateY(0); opacity:1; }
     }
 
     /* Confetti */
@@ -239,18 +278,6 @@
       z-index: 9;
     }
 
-    /* Tiny pulse when No clicked */
-    .shake{
-      animation: shake .22s ease;
-    }
-    @keyframes shake{
-      0%{transform:translateX(0)}
-      33%{transform:translateX(-6px)}
-      66%{transform:translateX(6px)}
-      100%{transform:translateX(0)}
-    }
-
-    /* Footer */
     .footer{
       padding: 10px 22px 18px;
       text-align:center;
@@ -264,39 +291,41 @@
     }
   </style>
 </head>
+
 <body>
   <div class="glow"></div>
   <canvas class="confetti" id="confetti"></canvas>
 
   <main class="card" aria-live="polite">
     <header>
-      <div class="badge">💍 Special question • Tap wisely</div>
-      <h1>One Question.</h1>
-      <p>Made with love — optimized for mobile.</p>
+      <div class="badge">💍 سؤال خاص • اختار صح</div>
+      <h1>لحظة صغيرة…</h1>
+      <p>صفحة خفيفة ولطيفة — مناسبة للموبايل.</p>
     </header>
 
     <section class="content" id="askView">
       <div class="question">
-        <span>Hana, do you marry me?</span>
+        <span>هنتجوز امته؟</span>
       </div>
 
-      <div class="buttons">
-        <button id="yesBtn" type="button">Yes 🤍</button>
-        <button id="noBtn" type="button">No 🙃</button>
-      </div>
+      <div class="subhint">جرّب تدوس “مش دلوقتي”… بس على مسؤوليتك 😄</div>
 
-      <div class="hint">Try pressing “No”… if you dare 😄</div>
+      <div class="buttons" id="btnRow">
+        <button id="yesBtn" type="button">يلا بينا 🤍</button>
+        <button id="noBtn" type="button">مش دلوقتي 🙃</button>
+      </div>
     </section>
 
     <section class="success" id="successView">
       <div class="photoWrap">
-        <!-- ضع رابط صورتكم هنا (direct image URL) -->
-        <img id="coupleImg" alt="Our photo" src="https://cdn.shopify.com/s/files/1/0708/1433/5150/files/WhatsApp_Image_2026-02-04_at_7.49.04_PM.jpg?v=1770231479" />
+        <!-- حط رابط صورتكم هنا (direct image URL) -->
+        <img id="coupleImg" alt="صورتنا" src="https://cdn.shopify.com/s/files/1/0708/1433/5150/files/WhatsApp_Image_2026-02-04_at_7.49.04_PM.jpg?v=1770231479" />
       </div>
-      <div class="love">I love you ❤️</div>
+      <div class="love">بحبك ❤️</div>
+      <div class="miniText">وبجد… ربنا يتمم بخير 🤍</div>
     </section>
 
-    <div class="footer">© A tiny page with a big question.</div>
+    <div class="footer">© صفحة صغيرة بس سؤال كبير.</div>
   </main>
 
   <script>
@@ -305,48 +334,69 @@
     const askView = document.getElementById('askView');
     const successView = document.getElementById('successView');
     const img = document.getElementById('coupleImg');
+    const btnRow = document.getElementById('btnRow');
 
     let yesScale = 1;
     let noClicks = 0;
 
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-    function growYes(){
-      noClicks++;
-      // تكبير تدريجي لطيف
-      const bump = 0.18 + Math.min(noClicks * 0.02, 0.22);
-      yesScale = clamp(yesScale + bump, 1, 2.6);
-      yesBtn.style.transform = `scale(${yesScale})`;
-      yesBtn.style.filter = `brightness(${1 + Math.min(noClicks*0.04, 0.3)})`;
-      yesBtn.style.boxShadow = `0 20px 70px rgba(34,197,94, ${0.18 + Math.min(noClicks*0.04, 0.22)})`;
+    // Move the "No" button slightly to make it playful (desktop + mobile safe)
+    function dodgeNo(){
+      const rect = btnRow.getBoundingClientRect();
+      const maxX = Math.max(0, rect.width * 0.18);
+      const maxY = 18;
 
-      // اهتزاز بسيط لزر No
-      noBtn.classList.remove('shake');
-      void noBtn.offsetWidth; // restart animation
-      noBtn.classList.add('shake');
+      const x = (Math.random() * 2 - 1) * maxX;
+      const y = (Math.random() * 2 - 1) * maxY;
 
-      // رسائل تغيّر خفيفة
-      if (noClicks === 2) noBtn.textContent = "No? 🤨";
-      if (noClicks === 4) noBtn.textContent = "Still No? 😅";
-      if (noClicks === 6) noBtn.textContent = "Ok ok… 🙈";
-      if (noClicks >= 8) noBtn.textContent = "You can’t 😌";
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
     }
 
-    noBtn.addEventListener('click', (e) => {
-      growYes();
-    });
+    function growYes(){
+      noClicks++;
 
+      // Smooth progressive growth
+      const bump = 0.16 + Math.min(noClicks * 0.02, 0.22);
+      yesScale = clamp(yesScale + bump, 1, 2.75);
+
+      yesBtn.style.transform = `scale(${yesScale})`;
+      yesBtn.style.filter = `brightness(${1 + Math.min(noClicks*0.04, 0.32)})`;
+      yesBtn.style.boxShadow = `0 22px 80px rgba(34,197,94, ${0.18 + Math.min(noClicks*0.045, 0.26)})`;
+
+      // Little shake + dodge
+      noBtn.classList.remove('shake');
+      void noBtn.offsetWidth;
+      noBtn.classList.add('shake');
+      dodgeNo();
+
+      // Cute text nudges
+      if (noClicks === 2) noBtn.textContent = "متأكد؟ 🤨";
+      if (noClicks === 4) noBtn.textContent = "لسه مش دلوقتي؟ 😅";
+      if (noClicks === 6) noBtn.textContent = "خلاص بقى 🙈";
+      if (noClicks >= 8) noBtn.textContent = "مش هتقدر 😌";
+    }
+
+    // Click/Touch on "No"
+    noBtn.addEventListener('click', growYes);
+    // Bonus: on hover (desktop) to make it harder
+    noBtn.addEventListener('mouseenter', () => { if (noClicks >= 2) dodgeNo(); });
+
+    // Yes -> success
     yesBtn.addEventListener('click', () => {
-      // لو ما اتحطتش صورة، هنخليها بلايسهولدر لطيف
-      if (!img.src || img.src.includes("https://cdn.shopify.com/s/files/1/0708/1433/5150/files/WhatsApp_Image_2026-02-04_at_7.49.04_PM.jpg?v=1770231479")) {
+      // If you forgot to replace the image, use a nice placeholder
+      if (!img.src || img.src.includes("cdn.shopify.com/s/files/1/0708/1433/5150/files/WhatsApp_Image_2026-02-04_at_7.49.04_PM.jpg")) {
         img.src = "https://images.unsplash.com/photo-1529634892058-3f3f9f126f64?auto=format&fit=crop&w=1400&q=80";
       }
 
       askView.style.display = 'none';
       successView.style.display = 'block';
+
       startConfetti();
+
       yesBtn.disabled = true;
       noBtn.disabled = true;
+      noBtn.style.transform = "none";
     });
 
     // Confetti (lightweight)
@@ -355,8 +405,9 @@
     let W, H, pieces = [], raf;
 
     function resize(){
-      W = canvas.width = window.innerWidth * devicePixelRatio;
-      H = canvas.height = window.innerHeight * devicePixelRatio;
+      const dpr = window.devicePixelRatio || 1;
+      W = canvas.width = Math.floor(window.innerWidth * dpr);
+      H = canvas.height = Math.floor(window.innerHeight * dpr);
       ctx.setTransform(1,0,0,1,0,0);
     }
     window.addEventListener('resize', resize, {passive:true});
@@ -364,49 +415,48 @@
 
     function makePieces(){
       pieces = [];
-      const count = Math.min(220, Math.floor(window.innerWidth * 0.35));
+      const dpr = window.devicePixelRatio || 1;
+      const count = Math.min(260, Math.floor(window.innerWidth * 0.42));
       for(let i=0;i<count;i++){
         pieces.push({
           x: Math.random()*W,
-          y: -Math.random()*H*0.3,
-          r: (6 + Math.random()*10) * devicePixelRatio,
-          vy: (2.2 + Math.random()*4.2) * devicePixelRatio,
-          vx: (-1.2 + Math.random()*2.4) * devicePixelRatio,
+          y: -Math.random()*H*0.35,
+          r: (6 + Math.random()*10) * dpr,
+          vy: (2.2 + Math.random()*4.6) * dpr,
+          vx: (-1.2 + Math.random()*2.4) * dpr,
           rot: Math.random()*Math.PI,
-          vr: (-0.08 + Math.random()*0.16),
-          a: 0.85,
+          vr: (-0.09 + Math.random()*0.18),
+          a: 0.9,
         });
       }
     }
 
     function draw(){
       ctx.clearRect(0,0,W,H);
+
       for(const p of pieces){
         p.x += p.vx;
         p.y += p.vy;
         p.rot += p.vr;
         p.a *= 0.996;
 
-        // wrap
-        if (p.x < -50) p.x = W+50;
-        if (p.x > W+50) p.x = -50;
+        if (p.x < -60) p.x = W+60;
+        if (p.x > W+60) p.x = -60;
 
-        // simple gradient-ish colors
         const g = ctx.createLinearGradient(p.x, p.y, p.x + p.r, p.y + p.r);
-        g.addColorStop(0, `rgba(255,255,255,${0.9*p.a})`);
-        g.addColorStop(1, `rgba(34,197,94,${0.8*p.a})`);
+        g.addColorStop(0, `rgba(255,255,255,${0.92*p.a})`);
+        g.addColorStop(1, `rgba(34,197,94,${0.86*p.a})`);
 
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
         ctx.fillStyle = g;
         ctx.globalAlpha = p.a;
-        ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+        ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.62);
         ctx.restore();
       }
 
-      // stop after a while
-      const alive = pieces.some(p => p.y < H + 120 && p.a > 0.08);
+      const alive = pieces.some(p => p.y < H + 140 && p.a > 0.08);
       if (alive) raf = requestAnimationFrame(draw);
       else ctx.clearRect(0,0,W,H);
     }
@@ -419,4 +469,3 @@
   </script>
 </body>
 </html>
-
