@@ -8,81 +8,55 @@
 
   <style>
     :root{
-      --bg1:#070a12; --bg2:#0b1630;
+      --bg1:#070a12;
+      --bg2:#0b1630;
       --card: rgba(255,255,255,.08);
       --stroke: rgba(255,255,255,.14);
       --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.65);
-      --yes1:#22c55e; --yes2:#16a34a;
-      --no1:#ff4d6d;  --no2:#c9184a;
+      --yes:#22c55e;
+      --no:#ff4d6d;
       --shadow: 0 18px 60px rgba(0,0,0,.45);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
       background:
         radial-gradient(1200px 800px at 20% 10%, rgba(99,102,241,.35), transparent 60%),
         radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.25), transparent 55%),
-        radial-gradient(1000px 700px at 55% 90%, rgba(255,77,109,.22), transparent 55%),
         linear-gradient(180deg, var(--bg1), var(--bg2));
-      display:flex; align-items:center; justify-content:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       padding:16px;
-      overflow:hidden;
+      color:var(--text);
     }
 
     .card{
-      width:min(520px, 100%);
+      width:min(520px,100%);
       background:var(--card);
       border:1px solid var(--stroke);
-      border-radius:24px;
+      border-radius:26px;
       box-shadow:var(--shadow);
       backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .top{
-      padding:20px 18px 10px;
       text-align:center;
+      padding:26px 20px;
     }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:7px 11px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color:var(--muted);
-      font-size:12px;
-      user-select:none;
-    }
-
-    .q{
-      margin:14px 0 0;
-      font-size: clamp(28px, 5vw, 44px);
-      font-weight: 950;
+    .question{
+      font-size: clamp(30px, 5vw, 44px);
+      font-weight:900;
+      margin-bottom:22px;
       letter-spacing:-.6px;
-      line-height:1.05;
-    }
-    .q span{
-      background: linear-gradient(90deg, rgba(255,255,255,.96), rgba(255,255,255,.70));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
     }
 
-    .btns{
-      padding:14px 18px 18px;
+    .buttons{
       display:flex;
+      gap:14px;
       justify-content:center;
-      gap:12px;
       flex-wrap:wrap;
     }
 
@@ -96,184 +70,85 @@
       font-size:16px;
       color:#fff;
       box-shadow:0 14px 34px rgba(0,0,0,.28);
-      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+      transition: transform .2s ease;
     }
-    button:active{ transform: scale(.98); }
-    #yesBtn{ background: linear-gradient(180deg, var(--yes1), var(--yes2)); }
-    #noBtn{  background: linear-gradient(180deg, var(--no1), var(--no2)); }
+
+    button:active{ transform: scale(.97); }
+
+    #yesBtn{ background: linear-gradient(180deg, #34d399, var(--yes)); }
+    #noBtn{ background: linear-gradient(180deg, #fb7185, var(--no)); }
 
     .success{
       display:none;
-      padding: 6px 18px 18px;
-      text-align:center;
+      margin-top:18px;
     }
 
     .photo{
-      width:min(420px, 100%);
-      margin:12px auto 10px;
+      margin:14px auto 10px;
       border-radius:20px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
     }
+
     .photo img{
       width:100%;
-      height:auto;
       display:block;
     }
 
-    .fallback{
-      display:none;
-      padding:22px 14px;
-      color:rgba(255,255,255,.75);
-      font-weight:800;
-      font-size:14px;
-    }
-
     .love{
-      font-size: clamp(20px, 4.5vw, 34px);
-      font-weight: 950;
+      font-size: clamp(20px, 4.5vw, 32px);
+      font-weight:900;
       margin-top:10px;
-      background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(34,197,94,.85));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    canvas.confetti{
-      position:fixed; inset:0;
-      pointer-events:none;
-      z-index:9;
     }
   </style>
 </head>
 
 <body>
-  <canvas class="confetti" id="confetti"></canvas>
 
-  <main class="card" aria-live="polite">
-    <div class="top" id="askView">
-      <div class="badge">💍 سؤال بس</div>
-      <div class="q"><span>هنتجوز امته؟</span></div>
+  <main class="card">
+    <div id="askView">
+      <div class="question">استاذه هنا هنتجوز امته؟ </div>
+      <div class="buttons">
+        <button id="yesBtn">يلا بينا 🤍</button>
+        <button id="noBtn">مش دلوقتي 🙃</button>
+      </div>
     </div>
 
-    <div class="btns" id="askBtns">
-      <button id="yesBtn" type="button">يلا بينا 🤍</button>
-      <button id="noBtn" type="button">مش دلوقتي 🙃</button>
-    </div>
-
-    <section class="success" id="successView">
+    <div class="success" id="successView">
       <div class="photo">
-        <img id="coupleImg"
-             alt="صورتكم"
-             src="YOUR_DIRECT_IMAGE_URL"
-             loading="eager"
-             referrerpolicy="no-referrer"
-        />
-        <div class="fallback" id="fallbackBox">الصورة مش راضية تظهر 😅<br>بس الأهم إن الإجابة ظهرت 🤍</div>
+        <img
+          src="https://cdn.shopify.com/s/files/1/0708/1433/5150/files/WhatsApp_Image_2026-02-04_at_7.49.04_PM.jpg?v=1770231479"
+          alt="صورتنا"
+          loading="eager"
+          referrerpolicy="no-referrer"
+        >
       </div>
       <div class="love">بحبك ❤️</div>
-    </section>
+    </div>
   </main>
 
   <script>
     const yesBtn = document.getElementById('yesBtn');
     const noBtn  = document.getElementById('noBtn');
     const askView = document.getElementById('askView');
-    const askBtns = document.getElementById('askBtns');
     const successView = document.getElementById('successView');
-    const img = document.getElementById('coupleImg');
-    const fallbackBox = document.getElementById('fallbackBox');
 
-    // playful: every time "No" is clicked, make "Yes" bigger + move No a bit
-    let noClicks = 0, yesScale = 1;
+    let scale = 1;
 
-    function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
-    function dodgeNo(){
-      const x = (Math.random()*2-1) * 40;
-      const y = (Math.random()*2-1) * 14;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    }
     noBtn.addEventListener('click', () => {
-      noClicks++;
-      yesScale = clamp(yesScale + (0.18 + Math.min(noClicks*0.02,0.22)), 1, 2.7);
-      yesBtn.style.transform = `scale(${yesScale})`;
-      yesBtn.style.boxShadow = `0 22px 80px rgba(34,197,94,${0.18 + Math.min(noClicks*0.045,0.26)})`;
-      dodgeNo();
-      if (noClicks === 2) noBtn.textContent = "متأكد؟ 🤨";
-      if (noClicks === 4) noBtn.textContent = "لسه؟ 😅";
-      if (noClicks >= 6) noBtn.textContent = "مش هتقدر 😌";
-    });
+      scale = Math.min(scale + 0.25, 2.6);
+      yesBtn.style.transform = `scale(${scale})`;
 
-    // Image reliability: show fallback if it fails
-    img.addEventListener('error', () => {
-      img.style.display = "none";
-      fallbackBox.style.display = "block";
+      const x = (Math.random()*2-1)*40;
+      const y = (Math.random()*2-1)*12;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
     });
 
     yesBtn.addEventListener('click', () => {
-      askView.style.display = 'none';
-      askBtns.style.display = 'none';
-      successView.style.display = 'block';
-      startConfetti();
-      yesBtn.disabled = true;
-      noBtn.disabled = true;
-      noBtn.style.transform = "none";
+      askView.style.display = "none";
+      successView.style.display = "block";
     });
-
-    // Confetti (simple)
-    const canvas = document.getElementById('confetti');
-    const ctx = canvas.getContext('2d');
-    let W,H,p=[],raf;
-
-    function resize(){
-      const dpr = window.devicePixelRatio || 1;
-      W = canvas.width  = Math.floor(innerWidth*dpr);
-      H = canvas.height = Math.floor(innerHeight*dpr);
-      ctx.setTransform(1,0,0,1,0,0);
-    }
-    addEventListener('resize', resize, {passive:true});
-    resize();
-
-    function make(){
-      p=[];
-      const dpr = devicePixelRatio || 1;
-      const count = Math.min(240, Math.floor(innerWidth*0.42));
-      for(let i=0;i<count;i++){
-        p.push({
-          x: Math.random()*W,
-          y: -Math.random()*H*0.35,
-          s: (6+Math.random()*10)*dpr,
-          vx:(-1.1+Math.random()*2.2)*dpr,
-          vy:(2.2+Math.random()*4.6)*dpr,
-          a:.9
-        });
-      }
-    }
-
-    function draw(){
-      ctx.clearRect(0,0,W,H);
-      for(const c of p){
-        c.x+=c.vx; c.y+=c.vy; c.a*=.996;
-        if(c.x<-60) c.x=W+60;
-        if(c.x>W+60) c.x=-60;
-
-        ctx.globalAlpha=c.a;
-        ctx.fillStyle="rgba(255,255,255,.9)";
-        ctx.fillRect(c.x, c.y, c.s, c.s*0.6);
-      }
-      const alive = p.some(c => c.y < H+140 && c.a>0.08);
-      if(alive) raf=requestAnimationFrame(draw);
-      else ctx.clearRect(0,0,W,H);
-    }
-
-    function startConfetti(){
-      make();
-      cancelAnimationFrame(raf);
-      draw();
-    }
   </script>
+
 </body>
 </html>
