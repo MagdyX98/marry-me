@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0f1a" />
+  <title>💍 A Question</title>
+  <style>
+    :root{
+      --bg1:#070a12;
+      --bg2:#0b1630;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --yes1:#22c55e;
+      --yes2:#16a34a;
+      --no1:#ff4d6d;
+      --no2:#c9184a;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      overflow-x:hidden;
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(99,102,241,.35), transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, rgba(34,197,94,.25), transparent 55%),
+        radial-gradient(1000px 700px at 55% 90%, rgba(255,77,109,.22), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .glow{
+      position:fixed;
+      inset:-40vh -30vw;
+      background: conic-gradient(from 180deg, rgba(99,102,241,.18), rgba(34,197,94,.16), rgba(255,77,109,.14), rgba(99,102,241,.18));
+      filter: blur(70px);
+      opacity:.7;
+      animation: float 10s ease-in-out infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+    @keyframes float{
+      0%,100%{ transform: translate3d(0,0,0) rotate(0deg); }
+      50%{ transform: translate3d(2vw,-2vh,0) rotate(8deg); }
+    }
+
+    .card{
+      width:min(560px, 100%);
+      background: var(--card);
+      border:1px solid var(--stroke);
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position:relative;
+      z-index:1;
+      overflow:hidden;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(500px 240px at 30% 0%, rgba(255,255,255,.14), transparent 60%),
+                  radial-gradient(420px 280px at 80% 20%, rgba(99,102,241,.18), transparent 55%);
+      pointer-events:none;
+    }
+
+    header{
+      padding:26px 22px 10px;
+      text-align:center;
+      position:relative;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.2px;
+      user-select:none;
+    }
+
+    h1{
+      margin:14px 0 8px;
+      font-size: clamp(26px, 4.5vw, 38px);
+      line-height:1.1;
+      letter-spacing:-.6px;
+    }
+
+    p{
+      margin:0;
+      color:var(--muted);
+      font-size: 14.5px;
+    }
+
+    .content{
+      padding:18px 22px 26px;
+    }
+
+    .question{
+      margin:18px 0 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-size: clamp(22px, 4.2vw, 34px);
+      font-weight:800;
+      letter-spacing:-.4px;
+      text-align:center;
+    }
+    .question span{
+      background: linear-gradient(90deg, rgba(255,255,255,.92), rgba(255,255,255,.74));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .buttons{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:14px;
+      position:relative;
+    }
+
+    button{
+      border:0;
+      cursor:pointer;
+      padding:14px 18px;
+      border-radius:16px;
+      font-weight:800;
+      font-size:16px;
+      color:white;
+      min-width: 140px;
+      transform: translateZ(0);
+      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+      box-shadow: 0 14px 34px rgba(0,0,0,.28);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active{ transform: scale(.98); }
+
+    #yesBtn{
+      background: linear-gradient(180deg, var(--yes1), var(--yes2));
+      position:relative;
+      outline: 1px solid rgba(255,255,255,.12);
+    }
+
+    #yesBtn::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:16px;
+      background: radial-gradient(240px 90px at 30% 20%, rgba(255,255,255,.35), transparent 55%);
+      pointer-events:none;
+      opacity:.9;
+      mix-blend-mode: screen;
+    }
+
+    #noBtn{
+      background: linear-gradient(180deg, var(--no1), var(--no2));
+      outline: 1px solid rgba(255,255,255,.12);
+    }
+
+    .hint{
+      margin-top:14px;
+      text-align:center;
+      color:rgba(255,255,255,.62);
+      font-size:12.5px;
+    }
+
+    /* Success view */
+    .success{
+      display:none;
+      padding: 8px 22px 26px;
+      text-align:center;
+      position:relative;
+    }
+
+    .photoWrap{
+      margin:14px auto 12px;
+      width:min(420px, 100%);
+      border-radius:22px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: 0 18px 60px rgba(0,0,0,.42);
+      transform: translateY(6px);
+      opacity:0;
+      animation: popIn .55s cubic-bezier(.2,.9,.2,1) forwards;
+      background: rgba(255,255,255,.06);
+    }
+    .photoWrap img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    @keyframes popIn{
+      to{ transform: translateY(0); opacity:1; }
+    }
+
+    .love{
+      font-size: clamp(20px, 4.5vw, 34px);
+      font-weight:900;
+      letter-spacing:-.4px;
+      margin-top:10px;
+      background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(34,197,94,.85));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      opacity:0;
+      animation: fadeUp .55s ease .12s forwards;
+    }
+    @keyframes fadeUp{
+      to{ transform: translateY(-2px); opacity:1; }
+    }
+
+    /* Confetti */
+    canvas.confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index: 9;
+    }
+
+    /* Tiny pulse when No clicked */
+    .shake{
+      animation: shake .22s ease;
+    }
+    @keyframes shake{
+      0%{transform:translateX(0)}
+      33%{transform:translateX(-6px)}
+      66%{transform:translateX(6px)}
+      100%{transform:translateX(0)}
+    }
+
+    /* Footer */
+    .footer{
+      padding: 10px 22px 18px;
+      text-align:center;
+      color:rgba(255,255,255,.45);
+      font-size:12px;
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <canvas class="confetti" id="confetti"></canvas>
+
+  <main class="card" aria-live="polite">
+    <header>
+      <div class="badge">💍 Special question • Tap wisely</div>
+      <h1>One Question.</h1>
+      <p>Made with love — optimized for mobile.</p>
+    </header>
+
+    <section class="content" id="askView">
+      <div class="question">
+        <span>Hana, do you marry me?</span>
+      </div>
+
+      <div class="buttons">
+        <button id="yesBtn" type="button">Yes 🤍</button>
+        <button id="noBtn" type="button">No 🙃</button>
+      </div>
+
+      <div class="hint">Try pressing “No”… if you dare 😄</div>
+    </section>
+
+    <section class="success" id="successView">
+      <div class="photoWrap">
+        <!-- ضع رابط صورتكم هنا (direct image URL) -->
+        <img id="coupleImg" alt="Our photo" src="PASTE_YOUR_IMAGE_URL_HERE" />
+      </div>
+      <div class="love">I love you ❤️</div>
+    </section>
+
+    <div class="footer">© A tiny page with a big question.</div>
+  </main>
+
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn  = document.getElementById('noBtn');
+    const askView = document.getElementById('askView');
+    const successView = document.getElementById('successView');
+    const img = document.getElementById('coupleImg');
+
+    let yesScale = 1;
+    let noClicks = 0;
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function growYes(){
+      noClicks++;
+      // تكبير تدريجي لطيف
+      const bump = 0.18 + Math.min(noClicks * 0.02, 0.22);
+      yesScale = clamp(yesScale + bump, 1, 2.6);
+      yesBtn.style.transform = `scale(${yesScale})`;
+      yesBtn.style.filter = `brightness(${1 + Math.min(noClicks*0.04, 0.3)})`;
+      yesBtn.style.boxShadow = `0 20px 70px rgba(34,197,94, ${0.18 + Math.min(noClicks*0.04, 0.22)})`;
+
+      // اهتزاز بسيط لزر No
+      noBtn.classList.remove('shake');
+      void noBtn.offsetWidth; // restart animation
+      noBtn.classList.add('shake');
+
+      // رسائل تغيّر خفيفة
+      if (noClicks === 2) noBtn.textContent = "No? 🤨";
+      if (noClicks === 4) noBtn.textContent = "Still No? 😅";
+      if (noClicks === 6) noBtn.textContent = "Ok ok… 🙈";
+      if (noClicks >= 8) noBtn.textContent = "You can’t 😌";
+    }
+
+    noBtn.addEventListener('click', (e) => {
+      growYes();
+    });
+
+    yesBtn.addEventListener('click', () => {
+      // لو ما اتحطتش صورة، هنخليها بلايسهولدر لطيف
+      if (!img.src || img.src.includes("PASTE_YOUR_IMAGE_URL_HERE")) {
+        img.src = "https://images.unsplash.com/photo-1529634892058-3f3f9f126f64?auto=format&fit=crop&w=1400&q=80";
+      }
+
+      askView.style.display = 'none';
+      successView.style.display = 'block';
+      startConfetti();
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+    });
+
+    // Confetti (lightweight)
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W, H, pieces = [], raf;
+
+    function resize(){
+      W = canvas.width = window.innerWidth * devicePixelRatio;
+      H = canvas.height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(1,0,0,1,0,0);
+    }
+    window.addEventListener('resize', resize, {passive:true});
+    resize();
+
+    function makePieces(){
+      pieces = [];
+      const count = Math.min(220, Math.floor(window.innerWidth * 0.35));
+      for(let i=0;i<count;i++){
+        pieces.push({
+          x: Math.random()*W,
+          y: -Math.random()*H*0.3,
+          r: (6 + Math.random()*10) * devicePixelRatio,
+          vy: (2.2 + Math.random()*4.2) * devicePixelRatio,
+          vx: (-1.2 + Math.random()*2.4) * devicePixelRatio,
+          rot: Math.random()*Math.PI,
+          vr: (-0.08 + Math.random()*0.16),
+          a: 0.85,
+        });
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(const p of pieces){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        p.a *= 0.996;
+
+        // wrap
+        if (p.x < -50) p.x = W+50;
+        if (p.x > W+50) p.x = -50;
+
+        // simple gradient-ish colors
+        const g = ctx.createLinearGradient(p.x, p.y, p.x + p.r, p.y + p.r);
+        g.addColorStop(0, `rgba(255,255,255,${0.9*p.a})`);
+        g.addColorStop(1, `rgba(34,197,94,${0.8*p.a})`);
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = g;
+        ctx.globalAlpha = p.a;
+        ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+        ctx.restore();
+      }
+
+      // stop after a while
+      const alive = pieces.some(p => p.y < H + 120 && p.a > 0.08);
+      if (alive) raf = requestAnimationFrame(draw);
+      else ctx.clearRect(0,0,W,H);
+    }
+
+    function startConfetti(){
+      makePieces();
+      cancelAnimationFrame(raf);
+      draw();
+    }
+  </script>
+</body>
+</html>
